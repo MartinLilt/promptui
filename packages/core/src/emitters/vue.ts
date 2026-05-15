@@ -53,6 +53,7 @@ function emitBlock(block: Block, indent: number): string {
   const childPad = '  '.repeat(indent + 1)
 
   const text = block.directives.get('text')
+  const id = block.directives.get('id')
   const href = block.directives.get('href')
   const flow = block.directives.get('flow')
   const bind = block.directives.get('bind')
@@ -70,6 +71,7 @@ function emitBlock(block: Block, indent: number): string {
     const parsed = parseEach(eachStr)
     if (parsed) attrs.push(`v-for="(${parsed.varName}, index) in ${parsed.collection}"`, `:key="index"`)
   }
+  if (id !== undefined) attrs.push(emitAttrValue(id, 'id'))
   if (cls) attrs.push(`class="${cls}"`)
   if (variant) attrs.push(emitAttrValue(variant, 'variant'))
   if (href !== undefined) attrs.push(emitAttrValue(href, 'href'))
