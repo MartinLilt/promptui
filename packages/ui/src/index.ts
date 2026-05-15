@@ -557,6 +557,9 @@ export type { GridDefaultProps } from './grids/Default'
 export { ContainerDefault } from './containers/Default'
 export type { ContainerDefaultProps } from './containers/Default'
 
+export { TextDefault } from './text/Default'
+export type { TextDefaultProps } from './text/Default'
+
 // ------------------------------------------------------------------ //
 // Short-name aliases (v0.4.4+)
 // Drop the `Default` suffix when there's no ambiguity. Both names point

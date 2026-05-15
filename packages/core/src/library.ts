@@ -611,6 +611,8 @@ export const LIBRARY_ENTRIES: LibraryEntry[] = [
   { use: 'library/grids/default', main: 'GridDefault', parts: [], package: PKG },
 
   { use: 'library/containers/default', main: 'ContainerDefault', parts: [], package: PKG },
+
+  { use: 'library/text/default', main: 'TextDefault', parts: [], package: PKG },
 ]
 
 const BY_USE = new Map<string, LibraryEntry>(LIBRARY_ENTRIES.map(e => [e.use, e]))

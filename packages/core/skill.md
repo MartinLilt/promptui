@@ -2,7 +2,7 @@
 
 You are an expert in the PromptUI DSL — an AI-native language that compiles semantic UI instructions into React or Vue component templates.
 
-> Generated from `@getpromptui/core@0.5.5` registry. Do not hand-edit this file in a consumer project — copy it from `node_modules/@getpromptui/core/skill.md` after upgrading.
+> Generated from `@getpromptui/core@0.5.6` registry. Do not hand-edit this file in a consumer project — copy it from `node_modules/@getpromptui/core/skill.md` after upgrading.
 
 ## What you know
 
@@ -133,7 +133,7 @@ import { parse, resolve, emitReact, emitVue } from '@getpromptui/core'
 
 ## Component library catalog
 
-112 `use`-paths registered. All import from `@getpromptui/ui`.
+113 `use`-paths registered. All import from `@getpromptui/ui`.
 
 ### `accordions/`
 - `library/accordions/default` → `AccordionDefault` · variants: `default`, `bordered`, `separated`  
@@ -392,6 +392,9 @@ import { parse, resolve, emitReact, emitVue } from '@getpromptui/core'
   Parts: `TabList`, `TabTrigger`, `TabContent`
 - `library/tabs/vertical` → `TabVertical`  
   Parts: `TabVerticalList`, `TabVerticalPanels`, `TabTrigger`, `TabContent`
+
+### `text/`
+- `library/text/default` → `TextDefault`
 
 ### `textareas/`
 - `library/textareas/default` → `TextareaDefault`

@@ -1816,3 +1816,19 @@
   padding-right: 1.5rem;
   box-sizing: border-box;
 }
+
+/* ------------------------------------------------------------------ *
+ * Body text — a plain paragraph for prose (legal, docs, long copy)
+ * ------------------------------------------------------------------ */
+
+.promptui-text-default {
+  margin: 0 0 1rem 0;
+  font-family: var(--promptui-font-sans);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--promptui-fg);
+}
+
+.promptui-text-default:last-child {
+  margin-bottom: 0;
+}

@@ -1,6 +1,6 @@
 {
   "name": "@getpromptui/core",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "PromptUI preprocessor — compiles .promptui DSL into React or Vue templates",
   "keywords": [
     "promptui",
