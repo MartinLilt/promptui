@@ -49,11 +49,17 @@ export const AccordionDefault = React.forwardRef<HTMLDivElement, AccordionDefaul
   }
 ) as React.ForwardRefExoticComponent<AccordionDefaultProps & React.RefAttributes<HTMLDivElement>>
 
-export const AccordionItem = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>>(
-  function AccordionItem({ className, ...props }, ref) {
+type AccordionItemProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>, 'value'> & {
+  value?: string
+}
+
+export const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps>(
+  function AccordionItem({ className, value, ...props }, ref) {
+    const autoId = React.useId()
     return (
       <AccordionPrimitive.Item
         ref={ref}
+        value={value ?? autoId}
         className={['promptui-accordion-item', className].filter(Boolean).join(' ')}
         {...props}
       />
