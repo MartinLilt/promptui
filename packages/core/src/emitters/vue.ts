@@ -53,6 +53,7 @@ function emitBlock(block: Block, indent: number): string {
   const childPad = '  '.repeat(indent + 1)
 
   const text = block.directives.get('text')
+  const href = block.directives.get('href')
   const flow = block.directives.get('flow')
   const bind = block.directives.get('bind')
   const look = block.directives.get('look')
@@ -71,6 +72,7 @@ function emitBlock(block: Block, indent: number): string {
   }
   if (cls) attrs.push(`class="${cls}"`)
   if (variant) attrs.push(emitAttrValue(variant, 'variant'))
+  if (href !== undefined) attrs.push(emitAttrValue(href, 'href'))
   if (bind) attrs.push(`:modelValue="${bind}" @update:modelValue="${bind} = $event"`)
   if (flow) attrs.push(`@click="${flowToHandler(flow)}"`)
 

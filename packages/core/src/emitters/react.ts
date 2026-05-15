@@ -85,6 +85,7 @@ function emitBlockCore(block: Block, indent: number, mode: EmitMode, extraAttrs:
   const childPad = '  '.repeat(indent + 1)
 
   const text = block.directives.get('text')
+  const href = block.directives.get('href')
   const flow = block.directives.get('flow')
   const bind = block.directives.get('bind')
   const look = block.directives.get('look')
@@ -96,6 +97,7 @@ function emitBlockCore(block: Block, indent: number, mode: EmitMode, extraAttrs:
   const attrs: string[] = [...extraAttrs]
   if (className) attrs.push(`className="${className}"`)
   if (variant) attrs.push(`variant=${emitAttrValue(variant)}`)
+  if (href !== undefined) attrs.push(`href=${emitAttrValue(href)}`)
   if (bind) attrs.push(`value={${bind}} onChange={(v) => ${bindToSetter(bind)}(v)}`)
   if (flow) {
     const handlerRef = mode === 'component' ? flowToPropName(flow) : flowToHandler(flow)

@@ -2,7 +2,7 @@
 
 You are an expert in the PromptUI DSL — an AI-native language that compiles semantic UI instructions into React or Vue component templates.
 
-> Generated from `@getpromptui/core@0.5.1` registry. Do not hand-edit this file in a consumer project — copy it from `node_modules/@getpromptui/core/skill.md` after upgrading.
+> Generated from `@getpromptui/core@0.5.2` registry. Do not hand-edit this file in a consumer project — copy it from `node_modules/@getpromptui/core/skill.md` after upgrading.
 
 ## What you know
 
@@ -48,6 +48,7 @@ You are an expert in the PromptUI DSL — an AI-native language that compiles se
 | `ban`      | Forbidden: `invent-new-layout custom-css inline-styles extra-wrappers hierarchy-changes unapproved-components` |
 | `states`   | Descriptive variants: `desktop tablet mobile` / `default hover disabled` |
 | `text`     | Literal text content |
+| `href`     | Link target on anchor-bearing components: `"/docs"`, `"#features"`, `{{marketplaceUrl}}`. Emitted as React `href="..."` / `href={...}` or Vue `href="..."` / `:href="..."`. |
 | `flow`     | Interaction → handler: `open-waitlist` → `onClick={openWaitlist}` |
 | `bind`     | Data binding: `email` → `value={email} onChange={(v) => setEmail(v)}` |
 | `each`     | Repeat block: `each: user in users` → React `{users.map((user, i) => ...)}` / Vue `v-for`. Auto-adds `<collection>: unknown[]` to Props when wrapped. |
