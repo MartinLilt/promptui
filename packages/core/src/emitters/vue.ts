@@ -14,6 +14,10 @@ function flowToHandler(flow: string): string {
 const EACH_RE = /^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s+in\s+(.+?)\s*$/
 const EXPR_RE = /^\{\{\s*(.+?)\s*\}\}$/
 
+// HTML attributes passed straight through to the rendered element. Same
+// literal-vs-`{{expr}}` semantics as `href` / `id`. Enables native forms.
+const PASSTHROUGH_ATTRS = ['name', 'type', 'placeholder', 'action', 'method'] as const
+
 function parseEach(value: string): { varName: string; collection: string } | null {
   const m = value.match(EACH_RE)
   if (!m) return null
@@ -75,6 +79,10 @@ function emitBlock(block: Block, indent: number): string {
   if (cls) attrs.push(`class="${cls}"`)
   if (variant) attrs.push(emitAttrValue(variant, 'variant'))
   if (href !== undefined) attrs.push(emitAttrValue(href, 'href'))
+  for (const a of PASSTHROUGH_ATTRS) {
+    const v = block.directives.get(a)
+    if (v !== undefined) attrs.push(emitAttrValue(v, a))
+  }
   if (bind) attrs.push(`:modelValue="${bind}" @update:modelValue="${bind} = $event"`)
   if (flow) attrs.push(`@click="${flowToHandler(flow)}"`)
 

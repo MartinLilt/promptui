@@ -286,6 +286,7 @@
  * ------------------------------------------------------------------ */
 
 .promptui-input-default,
+.promptui-input-native,
 .promptui-input-email,
 .promptui-input-password,
 .promptui-input-search,
@@ -308,6 +309,7 @@
 .promptui-input-rounded { border-radius: 9999px; }
 
 .promptui-input-default:focus,
+.promptui-input-native:focus,
 .promptui-input-email:focus,
 .promptui-input-password:focus,
 .promptui-input-search:focus,

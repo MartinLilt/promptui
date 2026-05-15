@@ -285,6 +285,9 @@ export type { HoverCardDefaultProps, HoverCardTriggerProps, HoverCardContentProp
 export { InputDefault } from './inputs/Default'
 export type { InputDefaultProps } from './inputs/Default'
 
+export { InputNative } from './inputs/Native'
+export type { InputNativeProps } from './inputs/Native'
+
 export { InputEmail } from './inputs/Email'
 export type { InputEmailProps } from './inputs/Email'
 

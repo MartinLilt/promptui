@@ -325,6 +325,7 @@ export const LIBRARY_ENTRIES: LibraryEntry[] = [
     package: PKG,
   },
   { use: 'library/inputs/default', main: 'InputDefault', parts: [], package: PKG },
+  { use: 'library/inputs/native', main: 'InputNative', parts: [], package: PKG },
   { use: 'library/inputs/email', main: 'InputEmail', parts: [], package: PKG },
   { use: 'library/inputs/password', main: 'InputPassword', parts: [], package: PKG },
   { use: 'library/inputs/search', main: 'InputSearch', parts: [], package: PKG },

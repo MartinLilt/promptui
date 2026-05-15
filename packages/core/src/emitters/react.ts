@@ -23,6 +23,10 @@ function bindToSetter(bind: string): string {
 const EACH_RE = /^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s+in\s+(.+?)\s*$/
 const EXPR_RE = /^\{\{\s*(.+?)\s*\}\}$/
 
+// HTML attributes passed straight through to the rendered element. Same
+// literal-vs-`{{expr}}` semantics as `href` / `id`. Enables native forms.
+const PASSTHROUGH_ATTRS = ['name', 'type', 'placeholder', 'action', 'method'] as const
+
 function parseEach(value: string): { varName: string; collection: string } | null {
   const m = value.match(EACH_RE)
   if (!m) return null
@@ -100,6 +104,10 @@ function emitBlockCore(block: Block, indent: number, mode: EmitMode, extraAttrs:
   if (className) attrs.push(`className="${className}"`)
   if (variant) attrs.push(`variant=${emitAttrValue(variant)}`)
   if (href !== undefined) attrs.push(`href=${emitAttrValue(href)}`)
+  for (const a of PASSTHROUGH_ATTRS) {
+    const v = block.directives.get(a)
+    if (v !== undefined) attrs.push(`${a}=${emitAttrValue(v)}`)
+  }
   if (bind) attrs.push(`value={${bind}} onChange={(v) => ${bindToSetter(bind)}(v)}`)
   if (flow) {
     const handlerRef = mode === 'component' ? flowToPropName(flow) : flowToHandler(flow)

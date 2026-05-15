@@ -60,6 +60,7 @@ You are an expert in the PromptUI DSL — an AI-native language that compiles se
 | \`text\`     | Literal text content |
 | \`id\`       | DOM \`id\` on the rendered element — used for in-page anchors (\`href: "#features"\` + matching \`id: "features"\`). Same literal vs \`{{expr}}\` semantics as \`href\`. |
 | \`href\`     | Link target on anchor-bearing components: \`"/docs"\`, \`"#features"\`, \`{{marketplaceUrl}}\`. Emitted as React \`href="..."\` / \`href={...}\` or Vue \`href="..."\` / \`:href="..."\`. |
+| \`name\` \`type\` \`placeholder\` \`action\` \`method\` | HTML attributes passed straight through to the rendered element — enables native \`<form>\` submission (e.g. a Mailchimp embed). Same literal vs \`{{expr}}\` semantics as \`href\`. Pair with \`library/forms/default\` (real \`<form>\`) + \`library/inputs/native\` (uncontrolled \`<input>\`). |
 | \`flow\`     | Interaction → handler: \`open-waitlist\` → \`onClick={openWaitlist}\` |
 | \`bind\`     | Data binding: \`email\` → \`value={email} onChange={(v) => setEmail(v)}\` |
 | \`each\`     | Repeat block: \`each: user in users\` → React \`{users.map((user, i) => ...)}\` / Vue \`v-for\`. Auto-adds \`<collection>: unknown[]\` to Props when wrapped. |
