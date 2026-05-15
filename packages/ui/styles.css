@@ -1777,3 +1777,27 @@
 .promptui-layout-article {
   display: block;
 }
+
+/* ------------------------------------------------------------------ *
+ * Plain heading (no gradient) — the standard section heading
+ * ------------------------------------------------------------------ */
+
+.promptui-heading-default {
+  margin: 0;
+  font-family: var(--promptui-font-sans);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--promptui-fg);
+}
+
+/* ------------------------------------------------------------------ *
+ * Grid wrapper — responsive auto-fit columns
+ * ------------------------------------------------------------------ */
+
+.promptui-grid-default {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}

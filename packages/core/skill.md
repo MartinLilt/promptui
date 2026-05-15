@@ -2,7 +2,7 @@
 
 You are an expert in the PromptUI DSL — an AI-native language that compiles semantic UI instructions into React or Vue component templates.
 
-> Generated from `@getpromptui/core@0.5.3` registry. Do not hand-edit this file in a consumer project — copy it from `node_modules/@getpromptui/core/skill.md` after upgrading.
+> Generated from `@getpromptui/core@0.5.4` registry. Do not hand-edit this file in a consumer project — copy it from `node_modules/@getpromptui/core/skill.md` after upgrading.
 
 ## What you know
 
@@ -133,7 +133,7 @@ import { parse, resolve, emitReact, emitVue } from '@getpromptui/core'
 
 ## Component library catalog
 
-109 `use`-paths registered. All import from `@getpromptui/ui`.
+111 `use`-paths registered. All import from `@getpromptui/ui`.
 
 ### `accordions/`
 - `library/accordions/default` → `AccordionDefault` · variants: `default`, `bordered`, `separated`  
@@ -252,11 +252,15 @@ import { parse, resolve, emitReact, emitVue } from '@getpromptui/core'
 - `library/forms/default` → `FormDefault`  
   Parts: `FormItem`, `FormLabel`, `FormControl`, `FormDescription`, `FormMessage`
 
+### `grids/`
+- `library/grids/default` → `GridDefault`
+
 ### `headers/`
 - `library/headers/default` → `HeaderDefault` · variants: `default`, `minimal`, `full`, `sticky`  
   Parts: `HeaderBrand`, `HeaderNav`, `HeaderActions`
 
 ### `headings/`
+- `library/headings/default` → `HeadingDefault`
 - `library/headings/gradientH2` → `GradientH2`
 
 ### `heroes/`

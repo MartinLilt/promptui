@@ -34,6 +34,9 @@ export type { InputRoundedProps, InputState } from './inputs/Rounded'
 export { GradientH2 } from './headings/GradientH2'
 export type { GradientH2Props } from './headings/GradientH2'
 
+export { HeadingDefault } from './headings/Default'
+export type { HeadingDefaultProps } from './headings/Default'
+
 export { ResultText } from './results/Text'
 export type { ResultTextProps } from './results/Text'
 
@@ -547,6 +550,9 @@ export { LayoutSection } from './layouts/Section'
 export type { LayoutSectionProps } from './layouts/Section'
 export { LayoutArticle } from './layouts/Article'
 export type { LayoutArticleProps } from './layouts/Article'
+
+export { GridDefault } from './grids/Default'
+export type { GridDefaultProps } from './grids/Default'
 
 // ------------------------------------------------------------------ //
 // Short-name aliases (v0.4.4+)

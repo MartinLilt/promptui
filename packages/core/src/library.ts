@@ -605,6 +605,10 @@ export const LIBRARY_ENTRIES: LibraryEntry[] = [
   { use: 'library/layouts/nav', main: 'LayoutNav', parts: [], package: PKG },
   { use: 'library/layouts/section', main: 'LayoutSection', parts: [], package: PKG },
   { use: 'library/layouts/article', main: 'LayoutArticle', parts: [], package: PKG },
+
+  { use: 'library/headings/default', main: 'HeadingDefault', parts: [], package: PKG },
+
+  { use: 'library/grids/default', main: 'GridDefault', parts: [], package: PKG },
 ]
 
 const BY_USE = new Map<string, LibraryEntry>(LIBRARY_ENTRIES.map(e => [e.use, e]))
