@@ -554,6 +554,9 @@ export type { LayoutArticleProps } from './layouts/Article'
 export { GridDefault } from './grids/Default'
 export type { GridDefaultProps } from './grids/Default'
 
+export { ContainerDefault } from './containers/Default'
+export type { ContainerDefaultProps } from './containers/Default'
+
 // ------------------------------------------------------------------ //
 // Short-name aliases (v0.4.4+)
 // Drop the `Default` suffix when there's no ambiguity. Both names point

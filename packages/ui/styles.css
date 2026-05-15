@@ -1801,3 +1801,18 @@
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
 }
+
+/* ------------------------------------------------------------------ *
+ * Page container — matches header inner width (80rem) and gutter
+ * (1.5rem). Use inside `<section>` (or similar) to constrain content
+ * to the same column as the site header.
+ * ------------------------------------------------------------------ */
+
+.promptui-container-default {
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  box-sizing: border-box;
+}
