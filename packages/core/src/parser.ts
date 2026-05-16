@@ -45,7 +45,7 @@ function tokenize(source: string): Token[] {
         // inline block: [Title] { text: "foo" } or [Title] { key: val key2: val2 }
         tokens.push({ kind: 'lbrace', line })
         const inner = rest.slice(1, -1).trim()
-        const directiveRe = /([A-Za-z][A-Za-z0-9_-]*)\s*:\s*(?:"([^"]*)"|((?:(?![A-Za-z][A-Za-z0-9_-]*\s*:)\S)+(?:\s+(?![A-Za-z][A-Za-z0-9_-]*\s*:)\S+)*))/g
+        const directiveRe = /([A-Za-z][A-Za-z0-9_@-]*)\s*:\s*(?:"([^"]*)"|((?:(?![A-Za-z][A-Za-z0-9_@-]*\s*:)\S)+(?:\s+(?![A-Za-z][A-Za-z0-9_@-]*\s*:)\S+)*))/g
         let m: RegExpExecArray | null
         while ((m = directiveRe.exec(inner)) !== null) {
           tokens.push({ kind: 'directive', key: m[1], value: m[2] ?? m[3].trim(), line })
@@ -61,7 +61,7 @@ function tokenize(source: string): Token[] {
     if (colonIdx > 0) {
       const key = trimmed.slice(0, colonIdx).trim()
       const rawValue = trimmed.slice(colonIdx + 1).trim()
-      if (/^[A-Za-z][A-Za-z0-9_-]*$/.test(key)) {
+      if (/^[A-Za-z][A-Za-z0-9_@-]*$/.test(key)) {
         const value = rawValue.startsWith('"') && rawValue.endsWith('"')
           ? rawValue.slice(1, -1)
           : rawValue

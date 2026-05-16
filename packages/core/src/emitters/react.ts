@@ -45,6 +45,37 @@ function emitAttrValue(value: string): string {
   return JSON.stringify(value)
 }
 
+// Inline i18n: `text@en: "..."` / `text@de: "..."`. The emitted component
+// gains a `locale` prop (default 'en') and renders the matching string,
+// falling back to en → plain `text:` → first defined locale.
+const TEXT_LOCALE_RE = /^text@([a-z]{2}(?:-[A-Za-z]{2})?)$/
+
+function localeValueExpr(value: string): string {
+  const m = value.match(EXPR_RE)
+  if (m) return `(${m[1]})`
+  return JSON.stringify(value)
+}
+
+function localizedTextOf(
+  block: Block,
+): { locales: [string, string][]; def: string } | null {
+  const entries: [string, string][] = []
+  for (const [k, v] of block.directives) {
+    const m = k.match(TEXT_LOCALE_RE)
+    if (m) entries.push([m[1], v])
+  }
+  if (entries.length === 0) return null
+  const plain = block.directives.get('text')
+  const en = entries.find(([l]) => l === 'en')
+  const def = en ? en[1] : plain !== undefined ? plain : entries[0][1]
+  return { locales: entries, def }
+}
+
+function blockNeedsLocale(block: Block): boolean {
+  for (const k of block.directives.keys()) if (TEXT_LOCALE_RE.test(k)) return true
+  return block.children.some(blockNeedsLocale)
+}
+
 function componentNameFor(block: Block): string {
   const use = block.directives.get('use')
   if (use) {
@@ -89,6 +120,8 @@ function emitBlockCore(block: Block, indent: number, mode: EmitMode, extraAttrs:
   const childPad = '  '.repeat(indent + 1)
 
   const text = block.directives.get('text')
+  const loc = localizedTextOf(block)
+  const hasText = text !== undefined || loc !== null
   const id = block.directives.get('id')
   const href = block.directives.get('href')
   const flow = block.directives.get('flow')
@@ -116,13 +149,23 @@ function emitBlockCore(block: Block, indent: number, mode: EmitMode, extraAttrs:
 
   const attrStr = attrs.length ? ' ' + attrs.join(' ') : ''
 
-  if (block.children.length === 0 && !text) {
+  if (block.children.length === 0 && !hasText) {
     return `${pad}<${componentName}${attrStr} />`
   }
 
   const lines: string[] = []
   lines.push(`${pad}<${componentName}${attrStr}>`)
-  if (text) lines.push(`${childPad}${emitTextValue(text)}`)
+  if (loc && mode === 'component') {
+    const map =
+      '{ ' +
+      loc.locales.map(([l, v]) => `${JSON.stringify(l)}: ${localeValueExpr(v)}`).join(', ') +
+      ' }'
+    lines.push(`${childPad}{((${map}) as Record<string, string>)[locale] ?? ${localeValueExpr(loc.def)}}`)
+  } else if (loc) {
+    lines.push(`${childPad}${emitTextValue(loc.def)}`)
+  } else if (text) {
+    lines.push(`${childPad}${emitTextValue(text)}`)
+  }
   for (const child of block.children) lines.push(emitBlock(child, indent + 1, mode))
   lines.push(`${pad}</${componentName}>`)
   return lines.join('\n')
@@ -216,20 +259,23 @@ export function emitReact(doc: Document, options?: EmitReactOptions): string {
   if (binds.size > 0) importLines.push(`import { useState } from 'react'`)
   importLines.push(...emitImportLines(used))
 
+  const needLocale = doc.blocks.some(blockNeedsLocale)
   const flowProps = [...flows].map(flowToPropName).sort()
   const eachProps = [...eachCollections].sort()
-  const hasProps = flowProps.length > 0 || eachProps.length > 0
+  const hasProps = flowProps.length > 0 || eachProps.length > 0 || needLocale
 
   const propLines: string[] = []
   for (const name of eachProps) propLines.push(`  ${name}: unknown[]`)
   for (const name of flowProps) propLines.push(`  ${name}?: () => void`)
+  if (needLocale) propLines.push(`  locale?: string`)
 
   const propsInterface = hasProps
     ? `export interface ${exportName}Props {\n${propLines.join('\n')}\n}`
     : ''
 
-  const allProps = [...eachProps, ...flowProps]
-  const propDestructure = hasProps ? `{ ${allProps.join(', ')} }: ${exportName}Props` : ''
+  const destructureNames = [...eachProps, ...flowProps]
+  if (needLocale) destructureNames.push(`locale = 'en'`)
+  const propDestructure = hasProps ? `{ ${destructureNames.join(', ')} }: ${exportName}Props` : ''
 
   const stateLines = [...binds].sort().map(b => `  const [${b}, ${bindToSetter(b)}] = useState('')`)
 

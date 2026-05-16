@@ -58,6 +58,7 @@ You are an expert in the PromptUI DSL — an AI-native language that compiles se
 | \`ban\`      | Forbidden: \`invent-new-layout custom-css inline-styles extra-wrappers hierarchy-changes unapproved-components\` |
 | \`states\`   | Descriptive variants: \`desktop tablet mobile\` / \`default hover disabled\` |
 | \`text\`     | Literal text content |
+| \`text@<loc>\` | Inline localization: \`text@en: "Hello"\` / \`text@de: "Hallo"\`. The emitted component gains a \`locale?: string\` prop (default \`'en'\`); renders the matching string, falling back en → plain \`text:\` → first defined locale. Values support \`{{expr}}\` like \`text\`. |
 | \`id\`       | DOM \`id\` on the rendered element — used for in-page anchors (\`href: "#features"\` + matching \`id: "features"\`). Same literal vs \`{{expr}}\` semantics as \`href\`. |
 | \`href\`     | Link target on anchor-bearing components: \`"/docs"\`, \`"#features"\`, \`{{marketplaceUrl}}\`. Emitted as React \`href="..."\` / \`href={...}\` or Vue \`href="..."\` / \`:href="..."\`. |
 | \`name\` \`type\` \`placeholder\` \`action\` \`method\` | HTML attributes passed straight through to the rendered element — enables native \`<form>\` submission (e.g. a Mailchimp embed). Same literal vs \`{{expr}}\` semantics as \`href\`. Pair with \`library/forms/default\` (real \`<form>\`) + \`library/inputs/native\` (uncontrolled \`<input>\`). |

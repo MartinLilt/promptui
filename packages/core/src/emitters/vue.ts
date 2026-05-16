@@ -37,6 +37,35 @@ function emitAttrValue(value: string, attr: string): string {
   return `${attr}="${value}"`
 }
 
+// Inline i18n: `text@en` / `text@de` → a `locale` prop (default 'en').
+const TEXT_LOCALE_RE = /^text@([a-z]{2}(?:-[A-Za-z]{2})?)$/
+
+function localeValueExpr(value: string): string {
+  const m = value.match(EXPR_RE)
+  if (m) return `(${m[1]})`
+  return JSON.stringify(value)
+}
+
+function localizedTextOf(
+  block: Block,
+): { locales: [string, string][]; def: string } | null {
+  const entries: [string, string][] = []
+  for (const [k, v] of block.directives) {
+    const m = k.match(TEXT_LOCALE_RE)
+    if (m) entries.push([m[1], v])
+  }
+  if (entries.length === 0) return null
+  const plain = block.directives.get('text')
+  const en = entries.find(([l]) => l === 'en')
+  const def = en ? en[1] : plain !== undefined ? plain : entries[0][1]
+  return { locales: entries, def }
+}
+
+function blockNeedsLocale(block: Block): boolean {
+  for (const k of block.directives.keys()) if (TEXT_LOCALE_RE.test(k)) return true
+  return block.children.some(blockNeedsLocale)
+}
+
 function componentNameFor(block: Block): string {
   const use = block.directives.get('use')
   if (use) {
@@ -57,6 +86,8 @@ function emitBlock(block: Block, indent: number): string {
   const childPad = '  '.repeat(indent + 1)
 
   const text = block.directives.get('text')
+  const loc = localizedTextOf(block)
+  const hasText = text !== undefined || loc !== null
   const id = block.directives.get('id')
   const href = block.directives.get('href')
   const flow = block.directives.get('flow')
@@ -88,13 +119,21 @@ function emitBlock(block: Block, indent: number): string {
 
   const attrStr = attrs.length ? ' ' + attrs.join(' ') : ''
 
-  if (block.children.length === 0 && !text) {
+  if (block.children.length === 0 && !hasText) {
     return `${pad}<${tag}${attrStr} />`
   }
 
   const lines: string[] = []
   lines.push(`${pad}<${tag}${attrStr}>`)
-  if (text) lines.push(`${childPad}${emitTextValue(text)}`)
+  if (loc) {
+    const map =
+      '{ ' +
+      loc.locales.map(([l, v]) => `${JSON.stringify(l)}: ${localeValueExpr(v)}`).join(', ') +
+      ' }'
+    lines.push(`${childPad}{{ (${map})[props.locale] ?? ${localeValueExpr(loc.def)} }}`)
+  } else if (text) {
+    lines.push(`${childPad}${emitTextValue(text)}`)
+  }
   for (const child of block.children) lines.push(emitBlock(child, indent + 1))
   lines.push(`${pad}</${tag}>`)
   return lines.join('\n')
@@ -113,12 +152,15 @@ function groupImportsByPackage(components: Set<string>): Map<string, string[]> {
   return byPkg
 }
 
-function emitScriptBlock(components: Set<string>): string {
+function emitScriptBlock(components: Set<string>, needLocale: boolean): string {
   const byPkg = groupImportsByPackage(components)
-  if (byPkg.size === 0) return ''
+  if (byPkg.size === 0 && !needLocale) return ''
   const lines: string[] = ['<script setup lang="ts">']
   for (const [pkg, names] of [...byPkg].sort(([a], [b]) => a.localeCompare(b))) {
     lines.push(`import { ${names.join(', ')} } from '${pkg}'`)
+  }
+  if (needLocale) {
+    lines.push(`const props = withDefaults(defineProps<{ locale?: string }>(), { locale: 'en' })`)
   }
   lines.push('</script>')
   return lines.join('\n')
@@ -132,7 +174,8 @@ export function emitVue(doc: Document, options?: EmitVueOptions): string {
   const used = new Set<string>()
   for (const block of doc.blocks) collectUsedComponents(block, used)
 
-  const scriptBlock = emitScriptBlock(used)
+  const needLocale = doc.blocks.some(blockNeedsLocale)
+  const scriptBlock = emitScriptBlock(used, needLocale)
   const body = doc.blocks.map(b => emitBlock(b, 0)).join('\n\n')
   const template = `<template>\n${body}\n</template>`
 
